@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -101,7 +102,24 @@ export default function Home() {
               {shortenedUrlResult.map((url, i) => {
                 return (
                   <li className="list-group-item" key={i}>
-                    <a href={url}>{url}</a>
+                    <CopyToClipboard text={url}>
+                      <button
+                        type="button"
+                        className="btn btn-outline-primary btn-sm"
+                      >
+                        Salin
+                      </button>
+                    </CopyToClipboard>{" "}
+                    <div className="mb-3">
+                      <input
+                        type="text"
+                        className="form-control"
+                        aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-sm"
+                        value={url}
+                        onChange={(e) => {}}
+                      />
+                    </div>
                   </li>
                 );
               })}
