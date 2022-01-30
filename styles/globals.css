@@ -1,0 +1,35 @@
+.background {
+  background-color: rgb(231, 182, 21);
+}
+.navset {
+  justify-content: right;
+}
+.mid {
+  background-color: rebeccapurple;
+}
+.textpage {
+  color: yellow;
+}
+.search {
+  background-color: #ffd700;
+  text-align: center;
+  height: auto;
+}
+.button {
+  background-color: yellow;
+}
+.image {
+  height: 30rem;
+}
+.textjudul {
+  color: gold;
+}
+.copy {
+  text-align: center;
+  background-color: whitesmoke;
+  height: auto;
+  margin-top: 3;
+}
+.btncopy {
+  justify-content: right;
+}
