@@ -1,3 +1,4 @@
+import "animate.css";
 import axios from "axios";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useState } from "react";
@@ -107,7 +108,10 @@ export default function Home() {
             <div className="rounded shadow-sm">
               {shortenedUrlResult.map((url, i) => {
                 return (
-                  <div className="list-group-item" key={i}>
+                  <div
+                    className="list-group-item animate__animated animate__fadeIn"
+                    key={i}
+                  >
                     <div className="row">
                       {/* original url */}
                       <div className="col-sm-6 my-1">
