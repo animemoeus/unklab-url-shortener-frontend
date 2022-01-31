@@ -1,12 +1,15 @@
-import { useState } from "react";
 import axios from "axios";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { useState } from "react";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [inputUrl, setInputUrl] = useState("");
   const [shortenedUrlResult, setShortenedUrlResult] = useState([
-    "https://waifu.animemoe.us",
+    {
+      original: "https://waifu.animemoe.us",
+      shortened: "http://localhost:8000/",
+    }, // dummy data
   ]);
 
   // submit button onClick
@@ -25,7 +28,10 @@ export default function Home() {
         // append the result to array `shortenedUrlResult`
         setShortenedUrlResult((shortenedUrlResult) => [
           ...shortenedUrlResult,
-          `http://localhost:3000/${res.data.slug}`,
+          {
+            original: inputUrl,
+            shortened: `http://localhost:3000/${res.data.slug}`,
+          },
         ]);
       })
       .catch((err) => {
@@ -56,12 +62,13 @@ export default function Home() {
 
       {/* container medium */}
       <div className="container-md px-1">
-        <div className="card mt-4">
+        <div className="card mt-4 mb-3 shadow">
           <div className="card-header text-center">
             <h4>Iustus Veritas Scientia</h4>
           </div>
           <div className="card-body">
-            <div className="input-group mb-3">
+            <div className="input-group mb-3 shadow-sm">
+              {/* input url */}
               <input
                 type="url"
                 className="form-control border"
@@ -69,9 +76,10 @@ export default function Home() {
                 value={inputUrl}
                 onChange={(e) => handleInputUrl(e)}
               />
+              {/* end — input url */}
               {isLoading === true && (
                 <button
-                  className="btn btn-outline-secondary"
+                  className="btn btn-outline-secondary shadow-none"
                   type="button"
                   disabled
                   onClick={handleSubmitButton}
@@ -95,35 +103,51 @@ export default function Home() {
               )}
             </div>
 
-            <hr className="m-0" />
-
             {/* show the shortened URL result */}
-            <ul className="list-group list-group-flush">
+            <div className="rounded shadow-sm">
               {shortenedUrlResult.map((url, i) => {
                 return (
-                  <li className="list-group-item" key={i}>
-                    <CopyToClipboard text={url}>
-                      <button
-                        type="button"
-                        className="btn btn-outline-primary btn-sm"
-                      >
-                        Salin
-                      </button>
-                    </CopyToClipboard>{" "}
-                    <div className="mb-3">
-                      <input
-                        type="text"
-                        className="form-control"
-                        aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-sm"
-                        value={url}
-                        onChange={(e) => {}}
-                      />
+                  <div className="list-group-item" key={i}>
+                    <div className="row">
+                      {/* original url */}
+                      <div className="col-sm-6 my-1">
+                        <a
+                          href={url.original}
+                          className="text-decoration-none text-muted"
+                        >
+                          {url.original}
+                        </a>
+                      </div>
+                      {/* end — original url */}
+                      {/* shortened url */}
+                      <div className="col-sm-5 my-1">
+                        <a
+                          href={url.shortened}
+                          className="text-decoration-none text-muted"
+                        >
+                          {url.shortened}
+                        </a>
+                      </div>
+                      {/* end — shortened url */}
+                      {/* copy button */}
+                      <div className="col-sm-1 my-1">
+                        <div className="d-grid">
+                          <CopyToClipboard text={url.shortened}>
+                            <button
+                              type="button"
+                              className="btn btn-outline-secondary btn-sm shadow-none"
+                            >
+                              Salin
+                            </button>
+                          </CopyToClipboard>
+                        </div>
+                      </div>
+                      {/* end — copy button */}
                     </div>
-                  </li>
+                  </div>
                 );
               })}
-            </ul>
+            </div>
             {/* end — show the shortened URL result */}
           </div>
         </div>
