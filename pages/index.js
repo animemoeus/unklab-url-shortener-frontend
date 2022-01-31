@@ -3,7 +3,7 @@ import axios from "axios";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useState } from "react";
 
-export default function Home() {
+export default function Home(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [inputUrl, setInputUrl] = useState("");
   const [shortenedUrlResult, setShortenedUrlResult] = useState([
@@ -31,7 +31,7 @@ export default function Home() {
           ...shortenedUrlResult,
           {
             original: inputUrl,
-            shortened: `http://localhost:3000/${res.data.slug}`,
+            shortened: `${props.domain}/${res.data.slug}`,
           },
         ]);
       })
@@ -159,4 +159,10 @@ export default function Home() {
       {/* end — container medium */}
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  return {
+    props: { domain: process.env.domain }, // will be passed to the page component as props
+  };
 }
