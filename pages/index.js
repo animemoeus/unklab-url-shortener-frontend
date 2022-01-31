@@ -7,10 +7,10 @@ export default function Home(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [inputUrl, setInputUrl] = useState("");
   const [shortenedUrlResult, setShortenedUrlResult] = useState([
-    {
-      original: "https://waifu.animemoe.us",
-      shortened: "http://localhost:8000/",
-    }, // dummy data
+    // {
+    //   original: "https://waifu.animemoe.us",
+    //   shortened: "http://localhost:8000/",
+    // }, // dummy data
   ]);
 
   // submit button onClick

@@ -1,6 +1,6 @@
 module.exports = {
   reactStrictMode: true,
   env: {
-    domain: "http://localhost:3000",
+    domain: "https://unklab-url-shortener.netlify.app",
   },
 };
