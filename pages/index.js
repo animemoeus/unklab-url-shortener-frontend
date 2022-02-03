@@ -58,89 +58,65 @@ export default function Home(props) {
   };
 
   return (
-    <div className="min-vh-100">
-      <h3 className="text-center mt-4">Unklab URL Shortener</h3>
+    <div className="">
+      <h3 className="">Unklab URL Shortener</h3>
 
       {/* container medium */}
-      <div className="container-md px-1">
-        <div className="card mt-4 mb-3 shadow">
-          <div className="card-header text-center">
+      <div className="">
+        <h1 className="">Hello world!</h1>
+
+        <div className="">
+          <div className="">
             <h4>Iustus Veritas Scientia</h4>
           </div>
-          <div className="card-body">
-            <div className="input-group mb-3 shadow-sm">
+          <div className="">
+            <div className="">
               {/* input url */}
               <input
-                type="url"
-                className="form-control border"
+                type=""
+                className=""
                 placeholder="Masukan URL"
                 value={inputUrl}
                 onChange={(e) => handleInputUrl(e)}
               />
               {/* end — input url */}
               {isLoading === true && (
-                <button
-                  className="btn btn-outline-secondary shadow-none"
-                  type="button"
-                  disabled
-                  onClick={handleSubmitButton}
-                >
-                  <span
-                    className="spinner-border spinner-border-sm"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>{" "}
-                  Submit
+                <button className="" type="" onClick={handleSubmitButton}>
+                  <span className=""></span> Submit
                 </button>
               )}
               {isLoading === false && (
-                <button
-                  className="btn btn-outline-secondary"
-                  type="button"
-                  onClick={handleSubmitButton}
-                >
+                <button className="" type="" onClick={handleSubmitButton}>
                   Submit
                 </button>
               )}
             </div>
 
             {/* show the shortened URL result */}
-            <div className="rounded shadow-sm">
+            <div className="">
               {shortenedUrlResult.map((url, i) => {
                 return (
-                  <div
-                    className="list-group-item animate__animated animate__fadeIn"
-                    key={i}
-                  >
-                    <div className="row">
+                  <div className="animate__animated animate__fadeIn" key={i}>
+                    <div className="">
                       {/* original url */}
-                      <div className="col-sm-6 my-1">
-                        <a
-                          href={url.original}
-                          className="text-decoration-none text-muted"
-                        >
+                      <div className="">
+                        <a href={url.original} className="">
                           {url.original}
                         </a>
                       </div>
                       {/* end — original url */}
                       {/* shortened url */}
-                      <div className="col-sm-5 my-1">
-                        <a
-                          href={url.shortened}
-                          className="text-decoration-none text-muted"
-                        >
+                      <div className="">
+                        <a href={url.shortened} className="">
                           {url.shortened}
                         </a>
                       </div>
                       {/* end — shortened url */}
                       {/* copy button */}
-                      <div className="col-sm-1 my-1">
-                        <div className="d-grid">
+                      <div className="">
+                        <div className="">
                           <CopyToClipboard text={url.shortened}>
-                            <button
-                              type="button"
-                              className="btn btn-outline-secondary btn-sm shadow-none"
-                            >
+                            <button type="button" className="">
                               Salin
                             </button>
                           </CopyToClipboard>
