@@ -15,14 +15,15 @@
   text-align: center;
   height: auto;
 }
-.button {
-  background-color: yellow;
+.buttonshort {
+  background-color: rebeccapurple;
 }
 .image {
   height: 30rem;
 }
 .textjudul {
-  color: gold;
+  color: rebeccapurple;
+  background-color: rgb(231, 182, 21);
 }
 .copy {
   text-align: center;
@@ -32,4 +33,11 @@
 }
 .btncopy {
   justify-content: right;
+}
+.all {
+  background-color: seashell;
+}
+.textNav {
+  color: rebeccapurple;
+  font-weight: bold;
 }
