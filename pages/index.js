@@ -5,9 +5,11 @@ import Navbar from "../components/molecules/Navbar";
 export default function Home() {
   return (
     <div>
-      <div className="container mt-1 all shadow ">
-        <Navbar />
-      </div>
+      <Navbar />
+
+      <hr />
+      <hr />
+
       <div className="border mt-2">
         <section className="jumbotron shadow text-center">
           <img src="/img/logo.png" alt="..." width="400" />
