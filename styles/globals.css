@@ -39,8 +39,12 @@
   font-weight: bold;
 }
 
-.bg-purple {
+.bg-orange {
   background-color: #fc9918;
+}
+
+.bg-purple {
+  background-color: #370665;
 }
 
 .btn-blue {
