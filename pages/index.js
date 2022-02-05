@@ -7,17 +7,17 @@ export default function Home() {
     <div>
       <Navbar />
 
-      <hr />
-      <hr />
-
-      <div className="border mt-2">
-        <section className="jumbotron shadow text-center">
-          <img src="/img/logo.png" alt="..." width="400" />
-          <div className="card shadow  textjudul animate__animated animate__backInUp text-center">
+      <div className="border">
+        <section className="text-center">
+          <img src="/img/logo-unklab.png" alt="..." className="w-50" />
+          <div className="">
             <h1>Unklab Shortener Link</h1>
           </div>
         </section>
       </div>
+
+      <hr />
+      <hr />
       <div className="border mt-3">
         <div className="container mt-3 shadow ">
           <div className="row g-0">
