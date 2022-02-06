@@ -1,7 +1,7 @@
 module.exports = {
   reactStrictMode: true,
   env: {
-    domain: "http://localhost:3000",
+    domain: "https://unklab.netlify.app",
     apiEndpoint: "https://uus.animemoe.us/api/shorten/",
   },
 };
