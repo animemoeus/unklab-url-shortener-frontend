@@ -31,7 +31,7 @@ export default function Home() {
           ...shortenedLink,
           {
             original: inputUrl,
-            result: `/${res.data.slug}`,
+            result: `${process.env.domain}/${res.data.slug}`,
           },
         ]);
       })
