@@ -50,3 +50,7 @@
 .btn-blue {
   background-color: #35589a;
 }
+
+.hero-image {
+  max-width: 40%;
+}
