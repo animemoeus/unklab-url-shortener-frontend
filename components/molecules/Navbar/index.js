@@ -1,6 +1,6 @@
 export default function Navbar() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-orange">
+    <nav className="navbar navbar-expand-lg navbar-light bg-orange shadow-sm">
       <div className="container-fluid">
         <a className="navbar-brand" href="#">
           Unklab URL Shortener
