@@ -3,29 +3,26 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useState } from "react";
 
 export default function Shortener() {
-  // default state
   const [inputUrl, setInputUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [shortenedLink, setShortenedLink] = useState([
-    // { original: "https://animemoe.us", result: "https://animemoe.us" },
-    // { original: "https://animemoe.us", result: "https://animemoe.us" },
-  ]);
+  const [shortenedLink, setShortenedLink] = useState([]);
 
   // submit button onClick
   const handleSubmitButton = () => {
+    // enable button loading animation
     setIsLoading(!isLoading);
+
+    const apiEndpoint = `${process.env.apiEndpoint}`; // get API endpoint from NextJs env variable
+    const payload = {
+      target_url: inputUrl,
+    }; // POST body data
 
     // API calling using POST method
     axios
-      .post(
-        "https://uus.animemoe.us/api/shorten/",
-        {
-          target_url: inputUrl,
-        } // body data
-      )
+      .post(apiEndpoint, payload)
       .then((res) => {
         // append the result to array `shortenedLink`
-        setShortenedLink((shortenedUrlResult) => [
+        setShortenedLink((shortenedLink) => [
           ...shortenedLink,
           {
             original: inputUrl,
@@ -35,11 +32,11 @@ export default function Shortener() {
       })
       .catch((err) => {
         // error handling
-        console.log(err);
+        // send alert to user
         if (err.response.status === 400) {
-          alert("Masukan URL yang valid!");
+          alert("Enter a valid URL!");
         } else {
-          alert("Ada masalah. Coba lagi!");
+          alert("There is a problem. Try again!");
         }
       })
       .finally(() => {
@@ -57,19 +54,20 @@ export default function Shortener() {
   };
 
   return (
-    <div className="p-2 mt-1">
-      <div className="border rounded container-md shadow-sm my-2 py-2">
+    <div className="p-2 bg-purple">
+      <div className="border rounded container-md bg-white shadow-sm my-2 py-2">
         <div className="row">
+          {/* input text from user */}
           <div className="col-sm-10 my-1">
-            {/* input text from user */}
             <input
               type="text"
               className="form-control"
               value={inputUrl}
               onChange={(e) => handleInputUrl(e)}
             />
-            {/* End — input text from user */}
           </div>
+          {/* end — input text from user */}
+          {/* submit button */}
           <div className="col-sm-2 my-1">
             <div className="d-grid gap-2">
               {isLoading === true && (
@@ -98,55 +96,59 @@ export default function Shortener() {
               )}
             </div>
           </div>
-          {/* Result */}
-          <div className="rounded mt-2">
-            {shortenedLink.map((e, i) => {
-              return (
-                <div
-                  className="list-group-item  animate__animated animate__fadeIn"
-                  key={i}
-                >
-                  <div className="row">
-                    {/* original url */}
-                    <div className="col-sm-6 my-1">
-                      <a
-                        href={e.original}
-                        className="text-decoration-none text-muted"
-                      >
-                        {e.original}
-                      </a>
-                    </div>
-                    {/* End — original url */}
-                    {/* result url */}
-                    <div className="col-sm-5 my-1">
-                      <a
-                        href={e.result}
-                        className="text-decoration-none text-muted"
-                      >
-                        {e.result}
-                      </a>
-                    </div>
-                    {/* End — result url */}
-                    {/* copy button */}
-                    <div className="col-sm-1 my-1">
-                      <div className="d-grid">
-                        <CopyToClipboard text={e.result}>
-                          <button
-                            type="button"
-                            className="btn btn-outline-success btn-sm shadow-none"
-                          >
-                            Copy
-                          </button>
-                        </CopyToClipboard>
+          {/* end — submit button */}
+
+          {/* shortener link result */}
+          {shortenedLink.length > 0 && (
+            <div className="rounded mt-2">
+              {shortenedLink.map((e, i) => {
+                return (
+                  <div
+                    className="list-group-item  animate__animated animate__fadeIn"
+                    key={i}
+                  >
+                    <div className="row">
+                      {/* original url */}
+                      <div className="col-sm-6 my-1">
+                        <a
+                          href={e.original}
+                          className="text-decoration-none text-muted"
+                        >
+                          {e.original}
+                        </a>
                       </div>
+                      {/* end — original url */}
+                      {/* result url */}
+                      <div className="col-sm-5 my-1">
+                        <a
+                          href={e.result}
+                          className="text-decoration-none text-muted"
+                        >
+                          {e.result}
+                        </a>
+                      </div>
+                      {/* end — result url */}
+                      {/* copy button */}
+                      <div className="col-sm-1 my-1">
+                        <div className="d-grid">
+                          <CopyToClipboard text={e.result}>
+                            <button
+                              type="button"
+                              className="btn btn-outline-secondary btn-sm shadow-none"
+                            >
+                              Copy
+                            </button>
+                          </CopyToClipboard>
+                        </div>
+                      </div>
+                      {/* end — copy button */}
                     </div>
-                    {/* End — copy button */}
                   </div>
-                </div>
-              );
-            })}
-          </div>
-          {/* End — Result */}
+                );
+              })}
+            </div>
+          )}
+          {/* end —  shortener link result */}
         </div>
       </div>
     </div>
