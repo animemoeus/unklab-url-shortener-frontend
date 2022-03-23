@@ -6,12 +6,14 @@ import Cookies from "js-cookie";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import SaveIcon from "@mui/icons-material/Save";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -50,6 +52,7 @@ export default function SignIn() {
     if (accessToken !== undefined) {
       router.push("/");
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken]);
 
@@ -72,20 +75,23 @@ export default function SignIn() {
     // API calling
     fetch("https://uus.animemoe.us/api/account/login/", requestOptions)
       .then((response) => {
-        if (response.status !== 200) {
+        if (!response.ok) {
           alert("Invalid email or password.");
+          return null;
+        } else {
+          return response.json();
         }
-
-        return response.json();
       })
       .then((result) => {
-        Cookies.set("name", result.name);
-        Cookies.set("email", result.email);
-        Cookies.set("accessToken", result.access);
-        setAccessToken(result.access);
+        if (result !== null) {
+          Cookies.set("name", result.name, { expires: 20 });
+          Cookies.set("email", result.email, { expires: 20 });
+          Cookies.set("accessToken", result.access, { expires: 20 });
+          setAccessToken(result.access);
+        }
       })
       .catch((error) => {
-        console.log(error);
+        alert("Invalid email or password.");
       })
       .finally(() => {
         setIsLoading(false);
@@ -108,7 +114,7 @@ export default function SignIn() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -146,6 +152,7 @@ export default function SignIn() {
             {isLoading === false && (
               <Button
                 type="submit"
+                color="primary"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
@@ -155,16 +162,19 @@ export default function SignIn() {
               </Button>
             )}
             {isLoading === true && (
-              <Button
+              <LoadingButton
+                loadingPosition="start"
+                loading
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
                 onClick={handleSubmit}
+                startIcon={<SaveIcon />}
                 disabled
               >
                 Masuk
-              </Button>
+              </LoadingButton>
             )}
             {/* End Login Button */}
             <Grid container>
