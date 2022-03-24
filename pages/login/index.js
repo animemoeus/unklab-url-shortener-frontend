@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import NextLink from "next/link";
 
 import Cookies from "js-cookie";
 
@@ -184,9 +185,12 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                {/* <Link href="#" variant="body2">
                   {"Don't have an account? Sign Up"}
-                </Link>
+                </Link> */}
+                <NextLink href="/register" passHref>
+                  <Link variant="body2">Belum memiliki akun? Mendaftar</Link>
+                </NextLink>
               </Grid>
             </Grid>
           </Box>
