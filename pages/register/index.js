@@ -1,6 +1,10 @@
 import NextLink from "next/link";
 import Head from "next/head";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
+import LoadingButton from "@mui/lab/LoadingButton";
+import SaveIcon from "@mui/icons-material/Save";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -22,7 +26,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <MUILink color="inherit" href="https://instagram.com/arter_tendea">
+      <MUILink color="inherit" href="https://instagram.com/arter_tendean">
         Unklab URL Shortener
       </MUILink>{" "}
       {new Date().getFullYear()}
@@ -34,13 +38,56 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    setIsLoading(true);
+
+    var formdata = new FormData();
+    formdata.append("username", username);
+    formdata.append("email", email);
+    formdata.append("first_name", firstName);
+    formdata.append("last_name", lastName);
+    formdata.append("password", password);
+    formdata.append("confirm_password", password);
+
+    var requestOptions = {
+      method: "POST",
+      body: formdata,
+      redirect: "follow",
+    };
+
+    fetch("https://uus.animemoe.us/api/account/register/", requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 409) {
+            alert("Email/Username telah terdaftar.");
+          } else {
+            alert("Pastikan kamu telah mengisi informasi dengan benar.");
+          }
+          return null;
+        } else {
+          return response.json();
+        }
+      })
+      .then((result) => {
+        if (result !== null && result.message === "Ok") {
+          alert("Pendaftaran berhasil.");
+          router.push("/login");
+        }
+      })
+      .catch((error) => console.log("error", error))
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -81,6 +128,7 @@ export default function SignUp() {
                   id="firstName"
                   label="Nama Depan"
                   autoFocus
+                  onChange={(e) => setFirstName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -91,6 +139,18 @@ export default function SignUp() {
                   label="Nama Belakang"
                   name="lastName"
                   autoComplete="family-name"
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="username"
+                  label="Nama pengguna"
+                  name="username"
+                  // autoComplete="username"
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -101,6 +161,7 @@ export default function SignUp() {
                   label="Alamat Email"
                   name="email"
                   autoComplete="email"
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -112,17 +173,39 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Daftar
-            </Button>
+            {/* Login Button */}
+            {isLoading === false && (
+              <Button
+                type="submit"
+                color="primary"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={handleSubmit}
+              >
+                Mendaftar
+              </Button>
+            )}
+            {isLoading === true && (
+              <LoadingButton
+                loadingPosition="start"
+                loading
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={handleSubmit}
+                startIcon={<SaveIcon />}
+                disabled
+              >
+                Mendaftar
+              </LoadingButton>
+            )}
+            {/* End Login Button */}
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <NextLink href="/login" passHref>
