@@ -102,7 +102,7 @@ export default function SignIn() {
   return (
     <ThemeProvider theme={theme}>
       <Head>
-        <title>{process.env.NEXT_PUBLIC_siteName} | Login</title>
+        <title>{process.env.NEXT_PUBLIC_siteName} | Masuk</title>
       </Head>
 
       <Container component="main" maxWidth="xs">
@@ -119,7 +119,7 @@ export default function SignIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Unklab URL Shortener
+            Masuk Unklab URL Shortener
           </Typography>
           <Box
             component="form"
@@ -180,14 +180,11 @@ export default function SignIn() {
             {/* End Login Button */}
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
+                <NextLink href="/reset-password" passHref>
+                  <Link variant="body2">Lupa Kata Sandi?</Link>
+                </NextLink>
               </Grid>
               <Grid item>
-                {/* <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link> */}
                 <NextLink href="/register" passHref>
                   <Link variant="body2">Belum memiliki akun? Mendaftar</Link>
                 </NextLink>

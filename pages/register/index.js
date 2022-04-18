@@ -110,7 +110,7 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Unklab URL Shortener
+            Mendaftar Unklab URL Shortener
           </Typography>
           <Box
             component="form"
