@@ -7,7 +7,7 @@ import Shortener from "../components/organisms/Shortener";
 export default function Home(props) {
   // const jwt = props.data.cookies.accessToken;
   // console.log(jwt);
-  console.log(props.data.cookies);
+  // console.log(props.data.cookies);
 
   return (
     <div className="min-vh-100">
@@ -20,11 +20,6 @@ export default function Home(props) {
 
 export async function getServerSideProps(context) {
   const data = {};
-
-  if (context.req.headers.cookie !== undefined) {
-    const parsedCookies = cookie.parse(context.req.headers.cookie);
-    console.log(parsedCookies);
-  }
 
   return { props: { data } };
 }

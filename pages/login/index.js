@@ -194,14 +194,16 @@ export default function Login(props) {
 export async function getServerSideProps(context) {
   const data = {};
 
-  try {
-    // get the cookies from web browser
+  // get the cookies from web browser
+  if ("cookie" in context.req.headers) {
     const parsedCookies = cookie.parse(context.req.headers.cookie);
 
-    // get the jwt
-    data["token"] = parsedCookies.token;
-  } catch (err) {
-    data["token"] = "";
+    if ("token" in parsedCookies) {
+      // get the jwt
+      data["token"] = parsedCookies.token;
+    } else {
+      data["token"] = "";
+    }
   }
 
   // check if jwt is valid
