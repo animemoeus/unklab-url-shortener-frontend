@@ -81,7 +81,10 @@ export default function ResetPassword(props) {
       redirect: "follow",
     };
 
-    fetch("http://localhost:8000/api/account/reset-password/", requestOptions)
+    fetch(
+      `${process.env.rootApiEndpoint}/api/account/reset-password/`,
+      requestOptions
+    )
       .then((response) => response.json())
       .then((result) => {
         if (result["success"] === true) {
@@ -127,7 +130,10 @@ export default function ResetPassword(props) {
       redirect: "follow",
     };
 
-    fetch("http://localhost:8000/api/account/change-password/", requestOptions)
+    fetch(
+      `${process.env.rootApiEndpoint}/api/account/change-password/`,
+      requestOptions
+    )
       .then((response) => response.json())
       .then((result) => {
         if (result.success == true) {
