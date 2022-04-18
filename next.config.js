@@ -3,7 +3,7 @@ module.exports = {
   env: {
     domain: "https://unklab.netlify.app",
     apiEndpoint: "https://uus.animemoe.us/api/shorten/",
-    rootApiEndpoint: "https://uus.animemoe.us",
+    rootApiEndpoint: "http://localhost:8000",
     NEXT_PUBLIC_siteName: "Unklab URL Shortener",
   },
 };
