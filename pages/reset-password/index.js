@@ -149,7 +149,7 @@ export default function ResetPassword(props) {
     return (
       <ThemeProvider theme={theme}>
         <Head>
-          <title>{process.env.NEXT_PUBLIC_siteName} | Reset Kata Sandi</title>
+          <title>Unklab URL Shortener| Reset Kata Sandi</title>
         </Head>
 
         <Container component="main" maxWidth="xs">
@@ -241,7 +241,7 @@ export default function ResetPassword(props) {
     return (
       <ThemeProvider theme={theme}>
         <Head>
-          <title>{process.env.NEXT_PUBLIC_siteName} | Reset Kata Sandi</title>
+          <title>Unklab URL Shortener| Reset Kata Sandi</title>
         </Head>
 
         <Container component="main" maxWidth="xs">
