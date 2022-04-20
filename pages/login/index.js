@@ -1,23 +1,24 @@
-import Head from "next/head";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import NextLink from "next/link";
-
-import Cookies from "js-cookie";
-
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import LoadingButton from "@mui/lab/LoadingButton";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
+import Cookies from "js-cookie";
+import Grid from "@mui/material/Grid";
+import Link from "@mui/material/Link";
+import LoadingButton from "@mui/lab/LoadingButton";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import CssBaseline from "@mui/material/CssBaseline";
+import Head from "next/head";
+import NextLink from "next/link";
+import SaveIcon from "@mui/icons-material/Save";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
+import cookie from "cookie";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 function Copyright(props) {
   return (
@@ -39,28 +40,29 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignIn() {
-  const router = useRouter();
-
-  // state
+export default function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [accessToken, setAccessToken] = useState(Cookies.get("accessToken"));
+  // const [accessToken, setAccessToken] = useState(Cookies.get("accessToken"));
 
-  // force redirect to home page if the user is authenticated
-  useEffect(() => {
-    if (accessToken !== undefined) {
-      router.push("/");
+  const router = useRouter();
+
+  // handle login button
+  const handleLoginButton = (event) => {
+    setIsLoading(true);
+
+    if (email.length === 0) {
+      alert("Masukan alamat email!");
+      setIsLoading(false);
+      return;
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken]);
-
-  // handle login button click
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setIsLoading(true);
+    if (password.length === 0) {
+      alert("Masukan kata sandi!");
+      setIsLoading(false);
+      return;
+    }
 
     // post data payload
     const formdata = new FormData();
@@ -74,25 +76,25 @@ export default function SignIn() {
     };
 
     // API calling
-    fetch("https://uus.animemoe.us/api/account/login/", requestOptions)
-      .then((response) => {
-        if (!response.ok) {
-          alert("Invalid email or password.");
-          return null;
-        } else {
-          return response.json();
-        }
-      })
+    fetch(
+      `${process.env.rootApiEndpoint}/api/account/login/v2/`,
+      requestOptions
+    )
+      .then((response) => response.json())
       .then((result) => {
-        if (result !== null) {
-          Cookies.set("name", result.name, { expires: 20 });
-          Cookies.set("email", result.email, { expires: 20 });
-          Cookies.set("accessToken", result.access, { expires: 20 });
-          setAccessToken(result.access);
+        if (result.success === true) {
+          Cookies.set("token", result.user.token, { expires: 7 });
+
+          // redirect to /login again
+          // why?
+          // coz getServerSideProps already handle that case
+          router.push("/login");
+        } else {
+          alert(result.message);
         }
       })
       .catch((error) => {
-        alert("Invalid email or password.");
+        alert("Sedang ada masalah. Coba lagi nanti.");
       })
       .finally(() => {
         setIsLoading(false);
@@ -102,7 +104,7 @@ export default function SignIn() {
   return (
     <ThemeProvider theme={theme}>
       <Head>
-        <title>{process.env.NEXT_PUBLIC_siteName} | Login</title>
+        <title>Unklab URL Shortener | Masuk</title>
       </Head>
 
       <Container component="main" maxWidth="xs">
@@ -119,14 +121,9 @@ export default function SignIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Unklab URL Shortener
+            Masuk Unklab URL Shortener
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
+          <Box sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -157,7 +154,7 @@ export default function SignIn() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                onClick={handleSubmit}
+                onClick={handleLoginButton}
               >
                 Masuk
               </Button>
@@ -170,7 +167,6 @@ export default function SignIn() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                onClick={handleSubmit}
                 startIcon={<SaveIcon />}
                 disabled
               >
@@ -180,14 +176,11 @@ export default function SignIn() {
             {/* End Login Button */}
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
+                <NextLink href="/reset-password" passHref>
+                  <Link variant="body2">Lupa Kata Sandi?</Link>
+                </NextLink>
               </Grid>
               <Grid item>
-                {/* <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link> */}
                 <NextLink href="/register" passHref>
                   <Link variant="body2">Belum memiliki akun? Mendaftar</Link>
                 </NextLink>
@@ -199,4 +192,47 @@ export default function SignIn() {
       </Container>
     </ThemeProvider>
   );
+}
+
+export async function getServerSideProps(context) {
+  const data = {};
+
+  // get the cookies from web browser
+  if ("cookie" in context.req.headers) {
+    const parsedCookies = cookie.parse(context.req.headers.cookie);
+
+    if ("token" in parsedCookies) {
+      // get the jwt
+      data["token"] = parsedCookies.token;
+    } else {
+      data["token"] = "";
+    }
+  }
+
+  // check if jwt is valid
+  const myHeaders = new Headers();
+  myHeaders.append("Authorization", `Bearer ${data["token"]}`);
+  var requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  const res = await fetch(
+    `${process.env.rootApiEndpoint}/api/account/validate-jwt/`,
+    requestOptions
+  );
+  const response = await res.json();
+
+  if (response.success === true) {
+    // redirect to home page
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  } else {
+    return { props: { data } };
+  }
 }
