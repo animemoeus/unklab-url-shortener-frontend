@@ -36,12 +36,12 @@ export default function NavbarX() {
   };
 
   return (
-    <Navbar bg="warning" expand={false}>
+    <Navbar bg="bg-white" expand={false}>
       <Container fluid>
         <Navbar.Brand as="span">
           {" "}
           <Link href="/">
-            <a className="fw-bolder text-decoration-none text-dark bold">
+            <a className="fw-bolder text-decoration-none text-dark">
               Unklab URL Shortener
             </a>
           </Link>
