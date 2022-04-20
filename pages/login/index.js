@@ -77,7 +77,7 @@ export default function Login(props) {
 
     // API calling
     fetch(
-      `${process.env.rootApiEndpoint}/api/account/login/v2/`,
+      `${process.env.rootApiEndpoint}/api/account/login/v2a/`,
       requestOptions
     )
       .then((response) => response.json())
@@ -92,6 +92,9 @@ export default function Login(props) {
         } else {
           alert(result.message);
         }
+      })
+      .catch((error) => {
+        alert("Sedang ada masalah. Coba lagi nanti.");
       })
       .finally(() => {
         setIsLoading(false);
