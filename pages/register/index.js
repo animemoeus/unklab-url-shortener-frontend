@@ -85,6 +85,9 @@ export default function Register() {
           alert(response.message);
         }
       })
+      .catch((error) => {
+        alert("Sedang ada masalah. Coba lagi nanti.");
+      })
       .finally(() => {
         setIsLoading(false);
       });

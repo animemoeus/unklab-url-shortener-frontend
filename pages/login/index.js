@@ -77,7 +77,7 @@ export default function Login(props) {
 
     // API calling
     fetch(
-      `${process.env.rootApiEndpoint}/api/account/login/v2a/`,
+      `${process.env.rootApiEndpoint}/api/account/login/v2/`,
       requestOptions
     )
       .then((response) => response.json())
