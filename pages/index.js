@@ -1,6 +1,7 @@
 // import cookie from "cookie";
 import Navbar from "../components/molecules/Navbar";
 
+
 import { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
@@ -59,6 +60,7 @@ export default function Home(props) {
     <div className="min-vh-100 ">
       <Navbar />
 
+
       {/* start URL shortener */}
       <div
         className="container-fluid d-flex align-items-center justify-content-center"
@@ -82,6 +84,7 @@ export default function Home(props) {
                   placeholder="Masukan Link..."
                   onChange={(e) => setInputUrl(e.target.value)}
                   value={inputUrl}
+
                 />
               </div>
             </div>
@@ -172,7 +175,6 @@ export default function Home(props) {
           </div>
         </div>
         {/* end result */}
-
         <div className="row">
           <div className="col-md-4 p-3">
             <div className="border rounded shadow p-4">
