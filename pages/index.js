@@ -1,10 +1,11 @@
 // import cookie from "cookie";
+import Navbar from "../components/molecules/Navbar";
+
 import { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
-import Navbar from "../components/molecules/Navbar";
-// import HeroImage from "../components/molecules/HeroImage";
 // import Shortener from "../components/organisms/Shortener";
+// import HeroImage from "../components/molecules/HeroImage";
 
 export default function Home(props) {
   const [inputUrl, setInputUrl] = useState("");
@@ -14,11 +15,17 @@ export default function Home(props) {
   const handleSubmitButton = (button) => {
     setIsLoading(true);
 
+    // inputUrl cannot be empty
+    if (inputUrl.length <= 0) {
+      alert("Masukan link!");
+      setIsLoading(false);
+      return;
+    }
+
     // API calling
     const formdata = new FormData();
     formdata.append("target_url", inputUrl);
-
-    var requestOptions = {
+    const requestOptions = {
       method: "POST",
       body: formdata,
       redirect: "follow",
@@ -37,7 +44,7 @@ export default function Home(props) {
             },
           ]);
         } else {
-          alert("Sedang ada masalah. Coba lagi nanti.");
+          alert("Link yang dimasukkan tidak valid.");
         }
       })
       .catch((error) => {
@@ -46,14 +53,12 @@ export default function Home(props) {
       .finally(() => {
         setIsLoading(false);
       });
-
-    console.log(shortenedLink);
   };
 
   return (
     <div className="min-vh-100 ">
       <Navbar />
-      {/* <Shortener /> */}
+
       {/* start URL shortener */}
       <div
         className="container-fluid d-flex align-items-center justify-content-center"
@@ -106,8 +111,8 @@ export default function Home(props) {
       </div>
       {/* end URL shortener */}
 
+      {/* result */}
       <div className="container-fluid border">
-        {/* result */}
         <div className="p-1 m-3 mb-3">
           <div
             className="row bg-white rounded shadow"
