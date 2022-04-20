@@ -1,21 +1,23 @@
-import NextLink from "next/link";
-import Head from "next/head";
-import { useState } from "react";
-import { useRouter } from "next/router";
-
-import LoadingButton from "@mui/lab/LoadingButton";
-import SaveIcon from "@mui/icons-material/Save";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import { Link as MUILink } from "@mui/material";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import Cookies from "js-cookie";
+import CssBaseline from "@mui/material/CssBaseline";
+import Grid from "@mui/material/Grid";
+import Head from "next/head";
+import LoadingButton from "@mui/lab/LoadingButton";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import NextLink from "next/link";
+import SaveIcon from "@mui/icons-material/Save";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import cookie from "cookie";
+
+import { Link as MUILink } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 function Copyright(props) {
   return (
@@ -37,7 +39,9 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignUp() {
+export default function Register() {
+  const router = useRouter();
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
@@ -45,13 +49,10 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const router = useRouter();
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleRegisterButton = () => {
     setIsLoading(true);
 
-    var formdata = new FormData();
+    const formdata = new FormData();
     formdata.append("username", username);
     formdata.append("email", email);
     formdata.append("first_name", firstName);
@@ -65,35 +66,38 @@ export default function SignUp() {
       redirect: "follow",
     };
 
-    fetch("https://uus.animemoe.us/api/account/register/", requestOptions)
+    // API calling
+    fetch(
+      `${process.env.rootApiEndpoint}/api/account/register/v2/`,
+      requestOptions
+    )
+      .then((response) => response.json())
       .then((response) => {
-        if (!response.ok) {
-          if (response.status === 409) {
-            alert("Email/Username telah terdaftar.");
-          } else {
-            alert("Pastikan kamu telah mengisi informasi dengan benar.");
-          }
-          return null;
+        if (response.success === true) {
+          // save the jwt to web browser cookie
+          Cookies.set("token", response.user.token, { expires: 7 });
+
+          // redirect to /login again
+          // why?
+          // coz getServerSideProps already handle that case
+          router.push("/register");
         } else {
-          return response.json();
+          alert(response.message);
         }
       })
-      .then((result) => {
-        if (result !== null && result.message === "Ok") {
-          alert("Pendaftaran berhasil.");
-          router.push("/login");
-        }
+      .catch((error) => {
+        alert("Sedang ada masalah. Coba lagi nanti.");
       })
-      .catch((error) => console.log("error", error))
       .finally(() => {
         setIsLoading(false);
       });
+    // end API calling
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Head>
-        <title>{process.env.NEXT_PUBLIC_siteName} | Mendaftar</title>
+        <title>Unklab URL Shortener | Mendaftar</title>
       </Head>
 
       <Container component="main" maxWidth="xs">
@@ -112,12 +116,7 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Mendaftar Unklab URL Shortener
           </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
-          >
+          <Box sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -185,7 +184,7 @@ export default function SignUp() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                onClick={handleSubmit}
+                onClick={handleRegisterButton}
               >
                 Mendaftar
               </Button>
@@ -198,7 +197,7 @@ export default function SignUp() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                onClick={handleSubmit}
+                // onClick={handleSubmit}
                 startIcon={<SaveIcon />}
                 disabled
               >
@@ -219,4 +218,47 @@ export default function SignUp() {
       </Container>
     </ThemeProvider>
   );
+}
+
+export async function getServerSideProps(context) {
+  const data = {};
+
+  // get the cookies from web browser
+  if ("cookie" in context.req.headers) {
+    const parsedCookies = cookie.parse(context.req.headers.cookie);
+
+    if ("token" in parsedCookies) {
+      // get the jwt
+      data["token"] = parsedCookies.token;
+    } else {
+      data["token"] = "";
+    }
+  }
+
+  // check if jwt is valid
+  const myHeaders = new Headers();
+  myHeaders.append("Authorization", `Bearer ${data["token"]}`);
+  var requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  const res = await fetch(
+    `${process.env.rootApiEndpoint}/api/account/validate-jwt/`,
+    requestOptions
+  );
+  const response = await res.json();
+
+  if (response.success === true) {
+    // redirect to home page
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  } else {
+    return { props: { data } };
+  }
 }
