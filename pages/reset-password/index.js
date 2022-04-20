@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
 
-import Cookies from "js-cookie";
+import cookie from "cookie";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -42,23 +42,16 @@ const theme = createTheme();
 export default function ResetPassword(props) {
   const router = useRouter();
 
-  const { jwt } = props.data;
+  let jwt = null;
+  if ("data" in props) {
+    jwt = props.data.jwt;
+  }
 
   // state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [accessToken, setAccessToken] = useState(Cookies.get("accessToken"));
-
-  // force redirect to home page if the user is authenticated
-  useEffect(() => {
-    if (accessToken !== undefined) {
-      router.push("/");
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken]);
 
   // handle reset password button
   const handleResetPassword = (event) => {
@@ -93,7 +86,9 @@ export default function ResetPassword(props) {
           alert(result["message"]);
         }
       })
-      .catch((error) => console.log("error", error))
+      .catch((error) => {
+        alert("Sedang ada masalah. Coba lagi nanti.");
+      })
       .finally(() => {
         setIsLoading(false);
       });
@@ -111,7 +106,7 @@ export default function ResetPassword(props) {
     }
 
     if (password !== confirmPassword) {
-      alert("Kata sandi yang dimasukkan harus sama.");
+      alert("Kata sandi baru yang dimasukkan harus sama.");
       setIsLoading(false);
       return;
     }
@@ -150,11 +145,11 @@ export default function ResetPassword(props) {
     // end API calling
   };
 
-  if (jwt === undefined) {
+  if (jwt === null) {
     return (
       <ThemeProvider theme={theme}>
         <Head>
-          <title>{process.env.NEXT_PUBLIC_siteName} | Reset Kata Sandi</title>
+          <title>Unklab URL Shortener| Reset Kata Sandi</title>
         </Head>
 
         <Container component="main" maxWidth="xs">
@@ -246,7 +241,7 @@ export default function ResetPassword(props) {
     return (
       <ThemeProvider theme={theme}>
         <Head>
-          <title>{process.env.NEXT_PUBLIC_siteName} | Reset Kata Sandi</title>
+          <title>Unklab URL Shortener| Reset Kata Sandi</title>
         </Head>
 
         <Container component="main" maxWidth="xs">
@@ -339,8 +334,47 @@ export default function ResetPassword(props) {
 export async function getServerSideProps(context) {
   // get the jwt
   const { akmj } = context.query;
+  const data = {};
+
+  // get the cookies from web browser
+  if ("cookie" in context.req.headers) {
+    const parsedCookies = cookie.parse(context.req.headers.cookie);
+
+    if ("token" in parsedCookies) {
+      // get the jwt
+      data["token"] = parsedCookies.token;
+    } else {
+      data["token"] = "";
+    }
+  }
+
+  // check if jwt is valid
+  const myHeaders = new Headers();
+  myHeaders.append("Authorization", `Bearer ${data["token"]}`);
+  var requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  const res = await fetch(
+    `${process.env.rootApiEndpoint}/api/account/validate-jwt/`,
+    requestOptions
+  );
+  const response = await res.json();
+
+  if (response.success === true) {
+    // redirect to home page
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 
   if (akmj !== undefined) {
+    // check if the jwt is valid
     let myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${akmj}`);
     let requestOptions = {
@@ -356,10 +390,10 @@ export async function getServerSideProps(context) {
 
     if (res.status === 200) {
       const data = await res.json();
-      data["jwt"] = akmj;
+      // data["jwt"] = akmj;
 
       return {
-        props: { data },
+        props: { data: { jwt: akmj } },
       };
     } else {
       // redirect to /reset-password page (input email)
@@ -370,11 +404,9 @@ export async function getServerSideProps(context) {
         },
       };
     }
+  } else {
+    return {
+      props: {},
+    };
   }
-
-  const data = {};
-
-  return {
-    props: { data },
-  };
 }

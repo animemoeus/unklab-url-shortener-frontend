@@ -93,6 +93,9 @@ export default function Login(props) {
           alert(result.message);
         }
       })
+      .catch((error) => {
+        alert("Sedang ada masalah. Coba lagi nanti.");
+      })
       .finally(() => {
         setIsLoading(false);
       });
