@@ -19,11 +19,11 @@ export default function Home(props) {
         }}
       >
         <div className="container-md" style={{ marginTop: "0rem" }}>
-          <h1 className="text-center text-white mb-4">
+          <h1 className="text-center text-white mb-4 animate__animated animate__fadeInDown">
             Penyingkat Tautan Universitas Klabat
           </h1>
           <div className="row">
-            <div className="col-md-8 p-1">
+            <div className="col-md-8 p-1 animate__animated animate__fadeInLeft">
               <div className="input-group input-group-lg">
                 <input
                   type="text"
@@ -32,7 +32,7 @@ export default function Home(props) {
                 />
               </div>
             </div>
-            <div className="col-md-4 p-1">
+            <div className="col-md-4 p-1 animate__animated animate__fadeInRight">
               <div className="input-group input-group-lg">
                 <button type="button" className="btn btn-primary w-100">
                   Singkatkan!
