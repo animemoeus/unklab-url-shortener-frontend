@@ -1,7 +1,6 @@
-// bootstrap css from react-bootstrap
+import "animate.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/globals.css";
-import "animate.css";
 import "../styles/nprogress.css";
 
 import Router from "next/router";
