@@ -51,11 +51,7 @@ const KuttyHero = () => {
       toast({
         description: "Tautan tidak boleh kosong!",
         status: "warning",
-<<<<<<< HEAD
         duration: 2000,
-=======
-        duration: 1300,
->>>>>>> 74e327c0dc2934e11b837340366ebd6790834b08
         isClosable: true,
         position: "bottom-right",
       });
@@ -80,15 +76,9 @@ const KuttyHero = () => {
           copy(`${process.env.domain}/${result.slug}`);
 
           toast({
-<<<<<<< HEAD
             description: "Tautan baru telah disalin ke clipboard.",
             status: "success",
             duration: 3000,
-=======
-            description: "Tautan telah disalin ke clipboard.",
-            status: "success",
-            duration: 2000,
->>>>>>> 74e327c0dc2934e11b837340366ebd6790834b08
             isClosable: true,
             position: "bottom-right",
           });
@@ -96,11 +86,7 @@ const KuttyHero = () => {
           toast({
             description: "Tautan yang diberikan tidak valid.",
             status: "warning",
-<<<<<<< HEAD
             duration: 2000,
-=======
-            duration: 1300,
->>>>>>> 74e327c0dc2934e11b837340366ebd6790834b08
             isClosable: true,
             position: "bottom-right",
           });
@@ -110,11 +96,7 @@ const KuttyHero = () => {
         toast({
           description: "Server sedang main tenis 🙃",
           status: "info",
-<<<<<<< HEAD
           duration: 2000,
-=======
-          duration: 1300,
->>>>>>> 74e327c0dc2934e11b837340366ebd6790834b08
           isClosable: true,
           position: "bottom-right",
         });
