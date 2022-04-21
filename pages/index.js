@@ -1,4 +1,5 @@
 import Footer from "../components/molecules/Footer";
+import Head from "next/head";
 import Navbar from "../components/molecules/Navbar";
 import React, { useState } from "react";
 import copy from "copy-to-clipboard";
@@ -108,6 +109,9 @@ const KuttyHero = () => {
 
   return (
     <>
+      <Head>
+        <title>Unklab URL Shortener 🔥</title>
+      </Head>
       <Navbar />
       <Box px={4} py={32} mx="auto">
         <Box
@@ -147,7 +151,7 @@ const KuttyHero = () => {
               <Input
                 mt={0}
                 size="lg"
-                type="email"
+                type="text"
                 placeholder="Masukkan link..."
                 required
                 onChange={(e) => setInputUrl(e.target.value)}
@@ -163,7 +167,6 @@ const KuttyHero = () => {
               type="submit"
               colorScheme="purple"
               cursor="pointer"
-              // disabled
               isLoading={isLoading}
               loadingText="Sabar..."
               onClick={handleSubmitButton}
