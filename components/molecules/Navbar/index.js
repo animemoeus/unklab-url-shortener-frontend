@@ -1,97 +1,116 @@
-import Link from "next/link";
-import { useState } from "react";
+import React from "react";
 
-import Cookies from "js-cookie";
+import {
+  chakra,
+  Box,
+  Flex,
+  useColorModeValue,
+  VisuallyHidden,
+  HStack,
+  Button,
+  useDisclosure,
+  VStack,
+  IconButton,
+  CloseButton,
+} from "@chakra-ui/react";
+import { AiOutlineMenu } from "react-icons/ai";
+// import { Logo } from "@choc-ui/logo";
 
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-import Offcanvas from "react-bootstrap/Offcanvas";
-// import NavDropdown from "react-bootstrap/NavDropdown";
-// import Form from "react-bootstrap/Form";
-// import FormControl from "react-bootstrap/FormControl";
-
-export default function NavbarX() {
-  const [name, setName] = useState(Cookies.get("name"));
-  const [email, setEmail] = useState(Cookies.get("email"));
-  const [accessToken, setAccessToken] = useState(Cookies.get("accessToken"));
-
-  const handleLogoutButton = () => {
-    const confirmLogout = confirm("Kamu yakin ingin keluar?");
-
-    if (confirmLogout) {
-      // remove the cookie
-      Cookies.remove("name");
-      Cookies.remove("email");
-      Cookies.remove("accessToken");
-
-      // update the state
-      setName(undefined);
-      setEmail(undefined);
-      setAccessToken(undefined);
-
-      alert("Berhasil.");
-    }
-  };
+export default function Gslr() {
+  const bg = useColorModeValue("white", "gray.800");
+  const mobileNav = useDisclosure();
 
   return (
-    <Navbar bg="light" expand={false} className="shadow">
-      <Container fluid>
-        <Navbar.Brand as="span">
-          {" "}
-          <Link href="/">
-            <a className="fw-bolder text-decoration-none text-dark">
-              Unklab URL Shortener
-            </a>
-          </Link>
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="offcanvasNavbar" />
-        <Navbar.Offcanvas placement="end">
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Menu</Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            <Nav className="justify-content-end flex-grow-1 pe-3">
-              {accessToken === undefined && (
-                <>
-                  <Nav.Link as="span">
-                    <Link href="/login">
-                      <a className="text-decoration-none text-dark">Masuk</a>
-                    </Link>
-                  </Nav.Link>
-                  <Nav.Link as="span">
-                    <Link href="/register">
-                      <a className="text-decoration-none text-dark">
-                        Mendaftar
-                      </a>
-                    </Link>
-                  </Nav.Link>
-                </>
-              )}
-              {accessToken !== undefined && (
-                <>
-                  <Nav.Link as="span">
-                    <Link href="/profile">
-                      <a className="text-decoration-none text-dark">{name}</a>
-                    </Link>
-                  </Nav.Link>
-                  <Nav.Link as="span">
-                    {/* <Link href="/profile"> */}
-                    <a
-                      className="text-decoration-none text-dark"
-                      onClick={handleLogoutButton}
-                    >
-                      <Button variant="outline-secondary">Logout</Button>
-                    </a>
-                    {/* </Link> */}
-                  </Nav.Link>
-                </>
-              )}
-            </Nav>
-          </Offcanvas.Body>
-        </Navbar.Offcanvas>
-      </Container>
-    </Navbar>
+    <React.Fragment>
+      <chakra.header
+        bg={bg}
+        w="full"
+        px={{ base: 2, sm: 4 }}
+        py={4}
+        shadow="md"
+      >
+        <Flex alignItems="center" justifyContent="space-between" mx="auto">
+          <Flex>
+            <chakra.a
+              href="/"
+              title="Choc Home Page"
+              display="flex"
+              alignItems="center"
+            >
+              Arter
+              <VisuallyHidden>Choc</VisuallyHidden>
+            </chakra.a>
+            <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
+              Choc
+            </chakra.h1>
+          </Flex>
+          <HStack display="flex" alignItems="center" spacing={1}>
+            <HStack
+              spacing={1}
+              mr={1}
+              color="brand.500"
+              display={{ base: "none", md: "inline-flex" }}
+            >
+              <Button variant="ghost">Features</Button>
+              <Button variant="ghost">Pricing</Button>
+              <Button variant="ghost">Blog</Button>
+              <Button variant="ghost">Company</Button>
+              <Button variant="ghost">Sign in</Button>
+            </HStack>
+            <Button colorScheme="brand" size="sm">
+              Get Started
+            </Button>
+            <Box display={{ base: "inline-flex", md: "none" }}>
+              <IconButton
+                display={{ base: "flex", md: "none" }}
+                aria-label="Open menu"
+                fontSize="20px"
+                color={useColorModeValue("gray.800", "inherit")}
+                variant="ghost"
+                icon={<AiOutlineMenu />}
+                onClick={mobileNav.onOpen}
+              />
+
+              <VStack
+                pos="absolute"
+                top={0}
+                left={0}
+                right={0}
+                display={mobileNav.isOpen ? "flex" : "none"}
+                flexDirection="column"
+                p={2}
+                pb={4}
+                m={2}
+                bg={bg}
+                spacing={3}
+                rounded="sm"
+                shadow="sm"
+              >
+                <CloseButton
+                  aria-label="Close menu"
+                  onClick={mobileNav.onClose}
+                />
+
+                <Button w="full" variant="ghost">
+                  Features
+                </Button>
+                <Button w="full" variant="ghost">
+                  Pricing
+                </Button>
+                <Button w="full" variant="ghost">
+                  Blog
+                </Button>
+                <Button w="full" variant="ghost">
+                  Company
+                </Button>
+                <Button w="full" variant="ghost">
+                  Sign in
+                </Button>
+              </VStack>
+            </Box>
+          </HStack>
+        </Flex>
+      </chakra.header>
+    </React.Fragment>
   );
 }
