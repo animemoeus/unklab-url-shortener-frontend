@@ -1,7 +1,9 @@
-import Navbar from "../components/molecules/Navbar";
 import Footer from "../components/molecules/Footer";
+import Navbar from "../components/molecules/Navbar";
+import React, { useState } from "react";
+import copy from "copy-to-clipboard";
 
-import React from "react";
+import { useToast } from "@chakra-ui/react";
 import {
   chakra,
   Box,
@@ -17,6 +19,8 @@ import {
 } from "@chakra-ui/react";
 
 const KuttyHero = () => {
+  const toast = useToast();
+
   const Feature = (props) => (
     <Flex alignItems="center" color={useColorModeValue(null, "white")}>
       <Icon
@@ -35,6 +39,73 @@ const KuttyHero = () => {
       {props.children}
     </Flex>
   );
+
+  const [isLoading, setIsloading] = useState(false);
+  const [inputUrl, setInputUrl] = useState("");
+
+  const handleSubmitButton = () => {
+    setIsloading(true);
+
+    if (inputUrl.length <= 0) {
+      toast({
+        description: "Tautan tidak boleh kosong!",
+        status: "warning",
+        duration: 1300,
+        isClosable: true,
+        position: "bottom-right",
+      });
+      setIsloading(false);
+      return;
+    }
+
+    // API calling
+    let formdata = new FormData();
+    formdata.append("target_url", inputUrl);
+    let requestOptions = {
+      method: "POST",
+      body: formdata,
+      redirect: "follow",
+    };
+
+    fetch(`${process.env.rootApiEndpoint}/api/shorten/`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.slug) {
+          // copy to clipboard
+          copy(`${process.env.domain}/${result.slug}`);
+
+          toast({
+            description: "Tautan telah disalin ke clipboard.",
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+            position: "bottom-right",
+          });
+        } else {
+          toast({
+            description: "Tautan yang diberikan tidak valid.",
+            status: "warning",
+            duration: 1300,
+            isClosable: true,
+            position: "bottom-right",
+          });
+        }
+      })
+      .catch((error) => {
+        toast({
+          description: "Server sedang main tenis 🙃",
+          status: "info",
+          duration: 1300,
+          isClosable: true,
+          position: "bottom-right",
+        });
+      })
+      .finally(() => {
+        setIsloading(false);
+        setInputUrl("");
+      });
+  };
+
   return (
     <>
       <Navbar />
@@ -79,6 +150,8 @@ const KuttyHero = () => {
                 type="email"
                 placeholder="Masukkan link..."
                 required
+                onChange={(e) => setInputUrl(e.target.value)}
+                value={inputUrl}
               />
             </GridItem>
             <Button
@@ -90,10 +163,22 @@ const KuttyHero = () => {
               type="submit"
               colorScheme="purple"
               cursor="pointer"
+              // disabled
+              isLoading={isLoading}
+              loadingText="Sabar..."
+              onClick={handleSubmitButton}
+              // onClick={() =>
+              //   toast({
+              //     title: "Account created.",
+              //     description: "We've created your account for you.",
+              //     status: "success",
+              //     duration: 9000,
+              //     isClosable: true,
+              //   })
+              // }
             >
               Singkatkan!
             </Button>
-            {/* <Button colorScheme="blue">Button</Button> */}
           </SimpleGrid>
           <Stack
             display="flex"
