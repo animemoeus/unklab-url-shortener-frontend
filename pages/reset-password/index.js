@@ -351,7 +351,7 @@ export async function getServerSideProps(context) {
   // check if jwt is valid
   const myHeaders = new Headers();
   myHeaders.append("Authorization", `Bearer ${data["token"]}`);
-  var requestOptions = {
+  let requestOptions = {
     method: "POST",
     headers: myHeaders,
     redirect: "follow",
@@ -373,6 +373,7 @@ export async function getServerSideProps(context) {
     };
   }
 
+  console.log(akmj);
   if (akmj !== undefined) {
     // check if the jwt is valid
     let myHeaders = new Headers();
