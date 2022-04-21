@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 import {
@@ -14,7 +15,6 @@ import {
   CloseButton,
 } from "@chakra-ui/react";
 import { AiOutlineMenu } from "react-icons/ai";
-// import { Logo } from "@choc-ui/logo";
 
 export default function Gslr() {
   const bg = useColorModeValue("white", "gray.800");
@@ -37,11 +37,10 @@ export default function Gslr() {
               display="flex"
               alignItems="center"
             >
-              Arter
               <VisuallyHidden>Choc</VisuallyHidden>
             </chakra.a>
             <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
-              Choc
+              Unklab URL Shortener
             </chakra.h1>
           </Flex>
           <HStack display="flex" alignItems="center" spacing={1}>
@@ -51,11 +50,20 @@ export default function Gslr() {
               color="brand.500"
               display={{ base: "none", md: "inline-flex" }}
             >
-              <Button variant="ghost">Features</Button>
+              {/* <Button variant="ghost">Features</Button>
               <Button variant="ghost">Pricing</Button>
               <Button variant="ghost">Blog</Button>
-              <Button variant="ghost">Company</Button>
-              <Button variant="ghost">Sign in</Button>
+              <Button variant="ghost">Company</Button> */}
+              <Link href="/login">
+                <a>
+                  <Button variant="ghost">Masuk</Button>
+                </a>
+              </Link>
+              <Link href="/register">
+                <a>
+                  <Button variant="ghost">Mendaftar</Button>
+                </a>
+              </Link>
             </HStack>
             <Button colorScheme="brand" size="sm">
               Get Started
@@ -91,7 +99,7 @@ export default function Gslr() {
                   onClick={mobileNav.onClose}
                 />
 
-                <Button w="full" variant="ghost">
+                {/* <Button w="full" variant="ghost">
                   Features
                 </Button>
                 <Button w="full" variant="ghost">
@@ -102,10 +110,21 @@ export default function Gslr() {
                 </Button>
                 <Button w="full" variant="ghost">
                   Company
-                </Button>
-                <Button w="full" variant="ghost">
-                  Sign in
-                </Button>
+                </Button> */}
+                <Link href="/login">
+                  <a>
+                    <Button w="full" variant="ghost">
+                      Masuk
+                    </Button>
+                  </a>
+                </Link>
+                <Link href="/register">
+                  <a>
+                    <Button w="full" variant="ghost">
+                      Mendaftar
+                    </Button>
+                  </a>
+                </Link>
               </VStack>
             </Box>
           </HStack>
