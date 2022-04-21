@@ -36,7 +36,7 @@ export default function NavbarX() {
   };
 
   return (
-    <Navbar bg="bg-white" expand={false}>
+    <Navbar bg="light" expand={false} className="shadow">
       <Container fluid>
         <Navbar.Brand as="span">
           {" "}
@@ -47,13 +47,9 @@ export default function NavbarX() {
           </Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="offcanvasNavbar" />
-        <Navbar.Offcanvas
-          id="offcanvasNavbar"
-          aria-labelledby="offcanvasNavbarLabel"
-          placement="end"
-        >
+        <Navbar.Offcanvas placement="end">
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title id="offcanvasNavbarLabel">Menu</Offcanvas.Title>
+            <Offcanvas.Title>Menu</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3">
