@@ -1,12 +1,8 @@
-// import cookie from "cookie";
+import Head from "next/head";
 import Navbar from "../components/molecules/Navbar";
-
 
 import { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-
-// import Shortener from "../components/organisms/Shortener";
-// import HeroImage from "../components/molecules/HeroImage";
 
 export default function Home(props) {
   const [inputUrl, setInputUrl] = useState("");
@@ -58,25 +54,28 @@ export default function Home(props) {
 
   return (
     <div className="min-vh-100 ">
-      <Navbar />
+      <Head>
+        <title>Unklab URL Shortener 🔥</title>
+      </Head>
 
+      <Navbar />
 
       {/* start URL shortener */}
       <div
-        className="container-fluid d-flex align-items-center justify-content-center"
+        className="container-fluid d-flex align-items-center justify-content-center shadow"
         style={{
           minHeight: "33rem",
-          backgroundImage: `url(https://cdn.discordapp.com/attachments/858938620425404426/966036902702641232/bg-masthead.jpg)`,
+          backgroundImage: `url(/img/bg/nayam-oeAcCi49Blg-unsplash.webp)`,
           backrepeat: "no-repeat",
           backgroundPosition: "center",
         }}
       >
         <div className="container-md" style={{ marginTop: "0rem" }}>
-          <h1 className="text-center text-white mb-4 animate__animated animate__fadeInDown">
+          <h1 className="text-center text-white mb-4">
             Penyingkat Tautan Universitas Klabat
           </h1>
           <div className="row">
-            <div className="col-md-8 p-1 animate__animated animate__fadeInLeft">
+            <div className="col-md-8 p-1">
               <div className="input-group input-group-lg">
                 <input
                   type="text"
@@ -84,11 +83,10 @@ export default function Home(props) {
                   placeholder="Masukan Link..."
                   onChange={(e) => setInputUrl(e.target.value)}
                   value={inputUrl}
-
                 />
               </div>
             </div>
-            <div className="col-md-4 p-1 animate__animated animate__fadeInRight">
+            <div className="col-md-4 p-1">
               <div className="input-group input-group-lg">
                 {isLoading === true && (
                   <button
