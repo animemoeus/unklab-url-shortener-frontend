@@ -4,6 +4,11 @@ import Navbar from "../components/molecules/Navbar";
 import { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
+import InputGroup from "react-bootstrap/InputGroup";
+import FormControl from "react-bootstrap/FormControl";
+import Button from "react-bootstrap/Button";
+import Spinner from "react-bootstrap/Spinner";
+
 export default function Home(props) {
   const [inputUrl, setInputUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +45,9 @@ export default function Home(props) {
               result: `${process.env.domain}/${result.slug}`,
             },
           ]);
+
+          // clean the input url
+          setInputUrl("");
         } else {
           alert("Link yang dimasukkan tidak valid.");
         }
@@ -71,42 +79,35 @@ export default function Home(props) {
         }}
       >
         <div className="container-md" style={{ marginTop: "0rem" }}>
-          <h1 className="text-center text-white mb-4">
+          <h1 className="text-center text-white mb-5">
             Penyingkat Tautan Universitas Klabat
           </h1>
+
           <div className="row">
-            <div className="col-md-8 p-1">
-              <div className="input-group input-group-lg">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Masukan Link..."
-                  onChange={(e) => setInputUrl(e.target.value)}
-                  value={inputUrl}
-                />
-              </div>
-            </div>
-            <div className="col-md-4 p-1">
-              <div className="input-group input-group-lg">
-                {isLoading === true && (
-                  <button
-                    type="button"
-                    className="btn btn-primary w-100 disabled"
-                  >
-                    Sabar...
-                  </button>
+            <InputGroup size="lg" className="mb-3 p-0 shadow rounded">
+              <FormControl
+                placeholder="Masukkan Link..."
+                className="p-2 shadow-none"
+                onChange={(e) => setInputUrl(e.target.value)}
+                value={inputUrl}
+              />
+              <Button
+                variant="dark"
+                className="shadow-none"
+                disabled={isLoading}
+                onClick={handleSubmitButton}
+              >
+                {isLoading ? (
+                  <>
+                    <Spinner animation="border" size="sm" />
+                    {"  "}
+                    Sabar........
+                  </>
+                ) : (
+                  "Singkatkan!"
                 )}
-                {isLoading === false && (
-                  <button
-                    type="button"
-                    className="btn btn-primary w-100"
-                    onClick={handleSubmitButton}
-                  >
-                    Singkatkan!
-                  </button>
-                )}
-              </div>
-            </div>
+              </Button>
+            </InputGroup>
           </div>
         </div>
       </div>
