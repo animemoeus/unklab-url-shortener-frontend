@@ -51,7 +51,7 @@ const KuttyHero = () => {
             color={useColorModeValue("gray.900", "gray.100")}
             lineHeight="shorter"
           >
-            A secure, faster way to transfer.
+            Penyingkat Tautan Universitas Klabat
           </chakra.h1>
           <chakra.p
             mb={6}
@@ -59,9 +59,8 @@ const KuttyHero = () => {
             color="gray.500"
             lineHeight="base"
           >
-            Were on a mission to bring transparency to finance. We charge as
-            little as possible, and we always show you upfront. No hidden fees.
-            No bad exchange rates. No surprises.
+            “The difference between ordinary and extraordinary is that little
+            extra.”
           </chakra.p>
           <SimpleGrid
             as="form"
@@ -73,12 +72,12 @@ const KuttyHero = () => {
             mb={8}
           >
             <GridItem as="label" colSpan={{ base: "auto", lg: 4 }}>
-              <VisuallyHidden>Your Email</VisuallyHidden>
+              <VisuallyHidden>Masukkan Tautan</VisuallyHidden>
               <Input
                 mt={0}
                 size="lg"
                 type="email"
-                placeholder="Enter your email..."
+                placeholder="Masukkan link..."
                 required
               />
             </GridItem>
@@ -92,7 +91,7 @@ const KuttyHero = () => {
               colorScheme="purple"
               cursor="pointer"
             >
-              Get Started
+              Singkatkan!
             </Button>
             {/* <Button colorScheme="blue">Button</Button> */}
           </SimpleGrid>
@@ -105,9 +104,9 @@ const KuttyHero = () => {
             fontSize="xs"
             color="gray.600"
           >
-            <Feature>No credit card required</Feature>
-            <Feature>14 days free</Feature>
-            <Feature>Cancel anytime</Feature>
+            <Feature>Project Final Fullstack FIK Unklab</Feature>
+            <Feature>NextJs</Feature>
+            <Feature>Django</Feature>
           </Stack>
         </Box>
       </Box>
