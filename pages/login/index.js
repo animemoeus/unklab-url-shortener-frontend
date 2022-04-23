@@ -40,7 +40,7 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function Login(props) {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -225,7 +225,7 @@ export async function getServerSideProps(context) {
   const response = await res.json();
 
   if (response.success === true) {
-    // redirect to home page
+    // redirect to home page if the user is authenticated
     return {
       redirect: {
         destination: "/",
@@ -233,6 +233,6 @@ export async function getServerSideProps(context) {
       },
     };
   } else {
-    return { props: { data } };
+    return { props: {} };
   }
 }
