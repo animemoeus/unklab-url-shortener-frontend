@@ -3,6 +3,7 @@ import Head from "next/head";
 import Navbar from "../components/molecules/Navbar";
 import React, { useState } from "react";
 import copy from "copy-to-clipboard";
+import Contributors from "../components/organisms/Contributors";
 
 import { useToast } from "@chakra-ui/react";
 import {
@@ -198,6 +199,9 @@ const KuttyHero = () => {
           </Stack>
         </Box>
       </Box>
+
+      <Contributors />
+
       <Footer />
     </>
   );
