@@ -38,8 +38,8 @@ const SocialButton = ({ children, label, href }) => {
 export default function SmallWithSocial() {
   return (
     <Box
-      bg={useColorModeValue("gray.50", "gray.900")}
-      color={useColorModeValue("gray.700", "gray.200")}
+      bg={useColorModeValue("white.50", "white.900")}
+      color={useColorModeValue("white.700", "white.200")}
     >
       <Container
         as={Stack}

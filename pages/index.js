@@ -54,7 +54,7 @@ const KuttyHero = () => {
         status: "warning",
         duration: 2000,
         isClosable: true,
-        position: "bottom-right",
+        position: "top-right",
       });
       setIsloading(false);
       return;
@@ -81,7 +81,7 @@ const KuttyHero = () => {
             status: "success",
             duration: 3000,
             isClosable: true,
-            position: "bottom-right",
+            position: "top-right",
           });
         } else {
           toast({
@@ -89,7 +89,7 @@ const KuttyHero = () => {
             status: "warning",
             duration: 2000,
             isClosable: true,
-            position: "bottom-right",
+            position: "top-right",
           });
         }
       })
@@ -99,7 +99,7 @@ const KuttyHero = () => {
           status: "info",
           duration: 2000,
           isClosable: true,
-          position: "bottom-right",
+          position: "top-right",
         });
       })
       .finally(() => {
@@ -111,7 +111,7 @@ const KuttyHero = () => {
   return (
     <>
       <Head>
-        <title>Unklab URL Shortener 🔥</title>
+        <title>🔥 Unklab URL Shortener</title>
       </Head>
       <Navbar />
       <Box px={4} py={32} mx="auto">
