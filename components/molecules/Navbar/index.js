@@ -20,8 +20,6 @@ import { AiOutlineMenu } from "react-icons/ai";
 export default function Gslr(props) {
   const user = props.user;
 
-  console.log(user);
-
   const bg = useColorModeValue("white", "gray.800");
   const mobileNav = useDisclosure();
 
