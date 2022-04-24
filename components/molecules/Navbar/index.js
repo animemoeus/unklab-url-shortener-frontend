@@ -13,10 +13,15 @@ import {
   VStack,
   IconButton,
   CloseButton,
+  Avatar,
 } from "@chakra-ui/react";
 import { AiOutlineMenu } from "react-icons/ai";
 
-export default function Gslr() {
+export default function Gslr(props) {
+  const user = props.user;
+
+  console.log(user);
+
   const bg = useColorModeValue("white", "gray.800");
   const mobileNav = useDisclosure();
 
@@ -50,24 +55,34 @@ export default function Gslr() {
               color="brand.500"
               display={{ base: "none", md: "inline-flex" }}
             >
-              {/* <Button variant="ghost">Features</Button>
-              <Button variant="ghost">Pricing</Button>
-              <Button variant="ghost">Blog</Button>
-              <Button variant="ghost">Company</Button> */}
-              <Link href="/login">
-                <a>
-                  <Button variant="ghost">Masuk</Button>
-                </a>
-              </Link>
-              <Link href="/register">
-                <a>
-                  <Button variant="ghost">Mendaftar</Button>
-                </a>
-              </Link>
+              {user === null && (
+                <>
+                  <Link href="/login">
+                    <a>
+                      <Button variant="ghost">Masuk</Button>
+                    </a>
+                  </Link>
+                  <Link href="/register">
+                    <a>
+                      <Button variant="ghost">Mendaftar</Button>
+                    </a>
+                  </Link>
+                </>
+              )}
+              {user !== null && (
+                <>
+                  <Link href="/akun">
+                    <a>
+                      <Avatar
+                        size={"sm"}
+                        name={`${user.first_name} ${user.last_name}`}
+                        // src="https://bit.ly/broken-link"
+                      />
+                    </a>
+                  </Link>
+                </>
+              )}
             </HStack>
-            <Button colorScheme="brand" size="sm">
-              Get Started
-            </Button>
             <Box display={{ base: "inline-flex", md: "none" }}>
               <IconButton
                 display={{ base: "flex", md: "none" }}
@@ -98,33 +113,38 @@ export default function Gslr() {
                   aria-label="Close menu"
                   onClick={mobileNav.onClose}
                 />
-
-                {/* <Button w="full" variant="ghost">
-                  Features
-                </Button>
-                <Button w="full" variant="ghost">
-                  Pricing
-                </Button>
-                <Button w="full" variant="ghost">
-                  Blog
-                </Button>
-                <Button w="full" variant="ghost">
-                  Company
-                </Button> */}
-                <Link href="/login">
-                  <a>
-                    <Button w="full" variant="ghost">
-                      Masuk
-                    </Button>
-                  </a>
-                </Link>
-                <Link href="/register">
-                  <a>
-                    <Button w="full" variant="ghost">
-                      Mendaftar
-                    </Button>
-                  </a>
-                </Link>
+                {user === null && (
+                  <>
+                    <Link href="/login">
+                      <a>
+                        <Button w="full" variant="ghost">
+                          Masuk
+                        </Button>
+                      </a>
+                    </Link>
+                    <Link href="/register">
+                      <a>
+                        <Button w="full" variant="ghost">
+                          Mendaftar
+                        </Button>
+                      </a>
+                    </Link>
+                  </>
+                )}
+                {user !== null && (
+                  <>
+                    <Link href="/akun">
+                      <a>
+                        <Avatar
+                          size={"xs"}
+                          name={`${user.first_name} ${user.last_name}`}
+                          // src="https://bit.ly/broken-link"
+                        />{" "}
+                        Profil
+                      </a>
+                    </Link>
+                  </>
+                )}
               </VStack>
             </Box>
           </HStack>

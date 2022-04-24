@@ -5,6 +5,8 @@ import React, { useState } from "react";
 import copy from "copy-to-clipboard";
 import Contributors from "../components/organisms/Contributors";
 
+import cookie from "cookie";
+
 import { useToast } from "@chakra-ui/react";
 import {
   chakra,
@@ -20,8 +22,11 @@ import {
   Icon,
 } from "@chakra-ui/react";
 
-const KuttyHero = () => {
+const KuttyHero = (props) => {
   const toast = useToast();
+  const user = props.user;
+
+  console.log(user);
 
   const Feature = (props) => (
     <Flex alignItems="center" color={useColorModeValue(null, "white")}>
@@ -113,7 +118,9 @@ const KuttyHero = () => {
       <Head>
         <title>🔥 Unklab URL Shortener</title>
       </Head>
-      <Navbar />
+
+      <Navbar user={user} />
+
       <Box px={4} py={32} mx="auto">
         <Box
           w={{ base: "full", md: 11 / 12, xl: 8 / 12 }}
@@ -208,3 +215,43 @@ const KuttyHero = () => {
 };
 
 export default KuttyHero;
+
+export async function getServerSideProps(context) {
+  const data = {};
+
+  // get the cookies from web browser
+  if ("cookie" in context.req.headers) {
+    const parsedCookies = cookie.parse(context.req.headers.cookie);
+
+    if ("token" in parsedCookies) {
+      // get the jwt
+      data["token"] = parsedCookies.token;
+    } else {
+      data["token"] = "";
+    }
+  }
+
+  // check if jwt is valid
+  const myHeaders = new Headers();
+  myHeaders.append("Authorization", `Bearer ${data["token"]}`);
+  var requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  const res = await fetch(
+    `${process.env.rootApiEndpoint}/api/account/validate-jwt/`,
+    requestOptions
+  );
+  const response = await res.json();
+
+  if (response.success === true) {
+    // redirect to home page if the user is authenticated
+    return {
+      props: { user: response.user },
+    };
+  } else {
+    return { props: { user: null } };
+  }
+}
