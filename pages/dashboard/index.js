@@ -1,9 +1,9 @@
-import Footer from "../components/molecules/Footer";
+import Footer from "../../components/molecules/Footer";
 import Head from "next/head";
-import Navbar from "../components/molecules/Navbar";
+import Navbar from "../../components/molecules/Navbar";
 import React, { useState } from "react";
 import copy from "copy-to-clipboard";
-import Contributors from "../components/organisms/Contributors";
+import Contributors from "../../components/organisms/Contributors";
 
 import cookie from "cookie";
 
