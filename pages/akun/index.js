@@ -22,7 +22,7 @@ import {
   Th,
   Tbody,
   Td,
-  Tfoot,
+  useToast,
 } from "@chakra-ui/react";
 import { FaBell, FaClipboardCheck, FaRss } from "react-icons/fa";
 import { AiFillGift } from "react-icons/ai";
@@ -30,15 +30,50 @@ import { BsGearFill } from "react-icons/bs";
 import { FiMenu, FiSearch } from "react-icons/fi";
 import { HiCode, HiCollection } from "react-icons/hi";
 import { MdHome, MdKeyboardArrowRight } from "react-icons/md";
-import React from "react";
+
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
 
 import cookie from "cookie";
 
 export default function Swibc(props) {
+  const toast = useToast();
   const user = props.user;
 
+  const [links, setLinks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   console.log(user);
+
+  useEffect(() => {
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${user.token}`);
+
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`${process.env.rootApiEndpoint}/api/account/my-urls/`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success) {
+          setLinks(result.data);
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        toast({
+          description: "Server sedang main tenis 🙃",
+          status: "info",
+          duration: 15000,
+          isClosable: true,
+          position: "top-right",
+        });
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const sidebar = useDisclosure();
   const integrations = useDisclosure();
@@ -144,7 +179,7 @@ export default function Swibc(props) {
   return (
     <>
       <Head>
-        <title>Unklab URL Shortener | Admin</title>
+        <title>Unklab URL Shortener | Akun</title>
       </Head>
       <Box
         as="section"
@@ -203,42 +238,59 @@ export default function Swibc(props) {
           <Box as="main" p="4">
             {/* Add content here, remove div below  */}
             {/* <Box borderWidth="4px" borderStyle="dashed" rounded="md" h="96" /> */}
-            <TableContainer>
-              <Table variant="striped" colorScheme="purple">
-                <TableCaption>Infomasi Link Unklab URL Shortener</TableCaption>
-                <Thead>
-                  <Tr>
-                    <Th>Link</Th>
-                    <Th>Original</Th>
-                    <Th isNumeric>Kunjungan</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  <Tr>
-                    <Td>inches</Td>
-                    <Td>millimetres (mm)</Td>
-                    <Td isNumeric>25.4</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>feet</Td>
-                    <Td>centimetres (cm)</Td>
-                    <Td isNumeric>30.48</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>yards</Td>
-                    <Td>metres (m)</Td>
-                    <Td isNumeric>0.91444</Td>
-                  </Tr>
-                </Tbody>
-                {/* <Tfoot>
+            {(isLoading == false && (
+              <TableContainer>
+                <Table variant="striped" colorScheme="purple">
+                  <TableCaption>
+                    Infomasi Link Unklab URL Shortener
+                  </TableCaption>
+                  <Thead>
+                    <Tr>
+                      <Th>Link</Th>
+                      <Th>Original</Th>
+                      <Th isNumeric>Kunjungan</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {links.results.map((item, index) => {
+                      return (
+                        <Tr key={index}>
+                          <Td>
+                            {process.env.domain}/{item.slug}
+                          </Td>
+                          <Td>{item.target_url}</Td>
+                          <Td isNumeric>{item.number_of_visits}</Td>
+                        </Tr>
+                      );
+                    })}
+                    <Tr>
+                      <Td>inches</Td>
+                      <Td>millimetres (mm)</Td>
+                      <Td isNumeric>25.4</Td>
+                    </Tr>
+                    <Tr>
+                      <Td>feet</Td>
+                      <Td>centimetres (cm)</Td>
+                      <Td isNumeric>30.48</Td>
+                    </Tr>
+                    <Tr>
+                      <Td>yards</Td>
+                      <Td>metres (m)</Td>
+                      <Td isNumeric>0.91444</Td>
+                    </Tr>
+                  </Tbody>
+                  {/* <Tfoot>
                 <Tr>
-                  <Th>To convert</Th>
-                  <Th>into</Th>
-                  <Th isNumeric>multiply by</Th>
+                <Th>To convert</Th>
+                <Th>into</Th>
+                <Th isNumeric>multiply by</Th>
                 </Tr>
               </Tfoot> */}
-              </Table>
-            </TableContainer>
+                </Table>
+              </TableContainer>
+            )) || (
+              <Box borderWidth="4px" borderStyle="dashed" rounded="md" h="96" />
+            )}
           </Box>
         </Box>
       </Box>
