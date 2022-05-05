@@ -92,9 +92,10 @@ export default function Swibc(props) {
 
   const handleLogoutButton = () => {
     const confirm = window.confirm("Yakin ingin keluar?");
-    // console.log(confirm);
-    Cookies.remove("token");
-    router.push("/");
+    if (confirm === true) {
+      Cookies.remove("token");
+      router.push("/");
+    }
   };
 
   const sidebar = useDisclosure();
