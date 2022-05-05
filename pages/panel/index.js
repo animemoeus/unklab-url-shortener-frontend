@@ -22,23 +22,80 @@ import {
   Th,
   Tbody,
   Td,
-  Tfoot,
+  useToast,
 } from "@chakra-ui/react";
+import { Button, ButtonGroup } from "@chakra-ui/react";
 import { FaBell, FaClipboardCheck, FaRss } from "react-icons/fa";
 import { AiFillGift } from "react-icons/ai";
 import { BsGearFill } from "react-icons/bs";
 import { FiMenu, FiSearch } from "react-icons/fi";
 import { HiCode, HiCollection } from "react-icons/hi";
 import { MdHome, MdKeyboardArrowRight } from "react-icons/md";
-import React from "react";
+
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Head from "next/head";
 
-import cookie from "cookie";
+import cookie from "cookie"; // SSR
+import Cookies from "js-cookie";
 
 export default function Swibc(props) {
+  const router = useRouter();
+  const toast = useToast();
   const user = props.user;
 
-  console.log(user);
+  const [links, setLinks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [apiEndpoint, setApiEndpoint] = useState(
+    `${process.env.rootApiEndpoint}/api/account/my-urls/?page=1`
+  );
+  useEffect(() => {
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${user.token}`);
+
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(apiEndpoint, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success) {
+          setLinks(result.data);
+
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        toast({
+          description: "Server sedang main tenis 🙃",
+          status: "info",
+          duration: 15000,
+          isClosable: true,
+          position: "top-right",
+        });
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handlePrevButton = () => {
+    console.log("prev");
+    updateLinks();
+  };
+
+  const handleNextButton = () => {
+    console.log("next");
+    updateLinks();
+  };
+
+  const handleLogoutButton = () => {
+    const confirm = window.confirm("Yakin ingin keluar?");
+    // console.log(confirm);
+    Cookies.remove("token");
+    router.push("/");
+  };
 
   const sidebar = useDisclosure();
   const integrations = useDisclosure();
@@ -78,42 +135,43 @@ export default function Swibc(props) {
     );
   };
 
-  const SidebarContent = (props) => (
-    <Box
-      as="nav"
-      pos="fixed"
-      top="0"
-      left="0"
-      zIndex="sticky"
-      h="full"
-      pb="10"
-      overflowX="hidden"
-      overflowY="auto"
-      bg={useColorModeValue("white", "gray.800")}
-      borderColor={useColorModeValue("inherit", "gray.700")}
-      borderRightWidth="1px"
-      w="60"
-      {...props}
-    >
-      <Flex px="4" py="5" align="center">
-        <Text
-          fontSize="2xl"
-          ml="2"
-          color={useColorModeValue("brand.500", "white")}
-          fontWeight="semibold"
-        >
-          Unklab URL Shortener
-        </Text>
-      </Flex>
-      <Flex
-        direction="column"
+  const SidebarContent = (props) => {
+    return (
+      <Box
         as="nav"
-        fontSize="sm"
-        color="gray.600"
-        aria-label="Main Navigation"
+        pos="fixed"
+        top="0"
+        left="0"
+        zIndex="sticky"
+        h="full"
+        pb="10"
+        overflowX="hidden"
+        overflowY="auto"
+        bg={useColorModeValue("white", "gray.800")}
+        borderColor={useColorModeValue("inherit", "gray.700")}
+        borderRightWidth="1px"
+        w="60"
+        {...props}
       >
-        <NavItem icon={MdHome}>Home</NavItem>
-        <NavItem icon={FaRss}>Articles</NavItem>
+        <Flex px="4" py="5" align="center">
+          <Text
+            fontSize="2xl"
+            ml="2"
+            color={useColorModeValue("brand.500", "white")}
+            fontWeight="semibold"
+          >
+            Unklab URL Shortener
+          </Text>
+        </Flex>
+        <Flex
+          direction="column"
+          as="nav"
+          fontSize="sm"
+          color="gray.600"
+          aria-label="Main Navigation"
+        >
+          <NavItem icon={MdHome}>Home</NavItem>
+          {/* <NavItem icon={FaRss}>Articles</NavItem>
         <NavItem icon={HiCollection}>Collections</NavItem>
         <NavItem icon={FaClipboardCheck}>Checklists</NavItem>
         <NavItem icon={HiCode} onClick={integrations.onToggle}>
@@ -135,16 +193,19 @@ export default function Swibc(props) {
             Zapier
           </NavItem>
         </Collapse>
-        <NavItem icon={AiFillGift}>Changelog</NavItem>
-        <NavItem icon={BsGearFill}>Settings</NavItem>
-      </Flex>
-    </Box>
-  );
+        <NavItem icon={AiFillGift}>Changelog</NavItem> */}
+          <NavItem icon={BsGearFill} onClick={handleLogoutButton}>
+            Keluar
+          </NavItem>
+        </Flex>
+      </Box>
+    );
+  };
 
   return (
     <>
       <Head>
-        <title>Unklab URL Shortener | Admin</title>
+        <title>Unklab URL Shortener | Akun</title>
       </Head>
       <Box
         as="section"
@@ -203,42 +264,42 @@ export default function Swibc(props) {
           <Box as="main" p="4">
             {/* Add content here, remove div below  */}
             {/* <Box borderWidth="4px" borderStyle="dashed" rounded="md" h="96" /> */}
-            <TableContainer>
-              <Table variant="striped" colorScheme="purple">
-                <TableCaption>Infomasi Link Unklab URL Shortener</TableCaption>
-                <Thead>
-                  <Tr>
-                    <Th>Link</Th>
-                    <Th>Original</Th>
-                    <Th isNumeric>Kunjungan</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  <Tr>
-                    <Td>inches</Td>
-                    <Td>millimetres (mm)</Td>
-                    <Td isNumeric>25.4</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>feet</Td>
-                    <Td>centimetres (cm)</Td>
-                    <Td isNumeric>30.48</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>yards</Td>
-                    <Td>metres (m)</Td>
-                    <Td isNumeric>0.91444</Td>
-                  </Tr>
-                </Tbody>
-                {/* <Tfoot>
+            {(isLoading == false && (
+              <TableContainer>
+                <Table variant="striped" colorScheme="purple">
+                  <TableCaption></TableCaption>
+                  <Thead>
+                    <Tr>
+                      <Th>Link</Th>
+                      <Th>Original</Th>
+                      <Th isNumeric>Kunjungan</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {links.results.map((item, index) => {
+                      return (
+                        <Tr key={index}>
+                          <Td>
+                            {process.env.domain}/{item.slug}
+                          </Td>
+                          <Td>{item.target_url}</Td>
+                          <Td isNumeric>{item.number_of_visits}</Td>
+                        </Tr>
+                      );
+                    })}
+                  </Tbody>
+                  {/* <Tfoot>
                 <Tr>
-                  <Th>To convert</Th>
-                  <Th>into</Th>
-                  <Th isNumeric>multiply by</Th>
+                <Th>To convert</Th>
+                <Th>into</Th>
+                <Th isNumeric>multiply by</Th>
                 </Tr>
               </Tfoot> */}
-              </Table>
-            </TableContainer>
+                </Table>
+              </TableContainer>
+            )) || (
+              <Box borderWidth="4px" borderStyle="dashed" rounded="md" h="96" />
+            )}
           </Box>
         </Box>
       </Box>

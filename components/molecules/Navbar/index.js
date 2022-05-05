@@ -69,7 +69,7 @@ export default function Gslr(props) {
               )}
               {user !== null && (
                 <>
-                  <Link href="/akun">
+                  <Link href="/panel">
                     <a>
                       <Avatar
                         size={"sm"}
