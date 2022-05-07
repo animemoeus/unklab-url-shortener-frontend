@@ -171,7 +171,9 @@ export default function Swibc(props) {
           color="gray.600"
           aria-label="Main Navigation"
         >
-          <NavItem icon={MdHome}>Home</NavItem>
+          <NavItem icon={MdHome} onClick={() => router.push("/")}>
+            Home
+          </NavItem>
           {/* <NavItem icon={FaRss}>Articles</NavItem>
         <NavItem icon={HiCollection}>Collections</NavItem>
         <NavItem icon={FaClipboardCheck}>Checklists</NavItem>

@@ -2,9 +2,9 @@ import Footer from "../components/molecules/Footer";
 import Head from "next/head";
 import Navbar from "../components/molecules/Navbar";
 import React, { useState } from "react";
-import copy from "copy-to-clipboard";
 import Contributors from "../components/organisms/Contributors";
 
+import copy from "copy-to-clipboard";
 import cookie from "cookie";
 
 import { useToast } from "@chakra-ui/react";
@@ -22,28 +22,9 @@ import {
   Icon,
 } from "@chakra-ui/react";
 
-const KuttyHero = (props) => {
+export default function Index(props) {
   const toast = useToast();
   const user = props.user;
-
-  const Feature = (props) => (
-    <Flex alignItems="center" color={useColorModeValue(null, "white")}>
-      <Icon
-        boxSize={4}
-        mr={1}
-        color="green.600"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-      >
-        <path
-          fillRule="evenodd"
-          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-          clipRule="evenodd"
-        ></path>
-      </Icon>
-      {props.children}
-    </Flex>
-  );
 
   const [isLoading, setIsloading] = useState(false);
   const [inputUrl, setInputUrl] = useState("");
@@ -64,10 +45,17 @@ const KuttyHero = (props) => {
     }
 
     // API calling
+    let myHeaders = new Headers();
     let formdata = new FormData();
+
+    // save shorten link to user if user is logged in
+    if (user !== null) {
+      myHeaders.append("Authorization", `Bearer ${user.token}`);
+    }
     formdata.append("target_url", inputUrl);
     let requestOptions = {
       method: "POST",
+      headers: myHeaders,
       body: formdata,
       redirect: "follow",
     };
@@ -110,6 +98,25 @@ const KuttyHero = (props) => {
         setInputUrl("");
       });
   };
+
+  const Feature = (props) => (
+    <Flex alignItems="center" color={useColorModeValue(null, "white")}>
+      <Icon
+        boxSize={4}
+        mr={1}
+        color="green.600"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fillRule="evenodd"
+          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+          clipRule="evenodd"
+        ></path>
+      </Icon>
+      {props.children}
+    </Flex>
+  );
 
   return (
     <>
@@ -176,15 +183,6 @@ const KuttyHero = (props) => {
               isLoading={isLoading}
               loadingText="Sabar..."
               onClick={handleSubmitButton}
-              // onClick={() =>
-              //   toast({
-              //     title: "Account created.",
-              //     description: "We've created your account for you.",
-              //     status: "success",
-              //     duration: 9000,
-              //     isClosable: true,
-              //   })
-              // }
             >
               Singkatkan!
             </Button>
@@ -210,9 +208,7 @@ const KuttyHero = (props) => {
       <Footer />
     </>
   );
-};
-
-export default KuttyHero;
+}
 
 export async function getServerSideProps(context) {
   const data = {};
