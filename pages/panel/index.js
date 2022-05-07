@@ -38,18 +38,27 @@ import Head from "next/head";
 
 import cookie from "cookie"; // SSR
 import Cookies from "js-cookie";
+import { set } from "nprogress";
 
 export default function Swibc(props) {
   const router = useRouter();
   const toast = useToast();
   const user = props.user;
 
-  const [links, setLinks] = useState([]);
+  const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [apiEndpoint, setApiEndpoint] = useState(
-    `${process.env.rootApiEndpoint}/api/account/my-urls/?page=1`
+    `${process.env.rootApiEndpoint}/api/account/my-urls/`
   );
+  const [previousPagination, setPreviousPagination] = useState(null);
+  const [nextPagination, setNextPagination] = useState(null);
+
   useEffect(() => {
+    getMyLinks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getMyLinks = () => {
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${user.token}`);
 
@@ -63,7 +72,18 @@ export default function Swibc(props) {
       .then((response) => response.json())
       .then((result) => {
         if (result.success) {
-          setLinks(result.data);
+          setData(result.data);
+
+          if (result.data.links.previous !== null) {
+            setPreviousPagination(
+              result.data.links.previous.replace("http://", "https://")
+            );
+          }
+          if (result.data.links.next !== null) {
+            setNextPagination(
+              result.data.links.next.replace("http://", "https://")
+            );
+          }
 
           setIsLoading(false);
         }
@@ -77,17 +97,100 @@ export default function Swibc(props) {
           position: "top-right",
         });
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
 
   const handlePrevButton = () => {
-    console.log("prev");
-    updateLinks();
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${user.token}`);
+
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(previousPagination, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success) {
+          setData(result.data);
+
+          if (result.data.links.previous !== null) {
+            setPreviousPagination(
+              result.data.links.previous.replace("http://", "https://")
+            );
+          } else {
+            setPreviousPagination(null);
+          }
+
+          if (result.data.links.next !== null) {
+            setNextPagination(
+              result.data.links.next.replace("http://", "https://")
+            );
+          } else {
+            setNextPagination(null);
+          }
+
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast({
+          description: "Server sedang main tenis 🙃",
+          status: "info",
+          duration: 15000,
+          isClosable: true,
+          position: "top-right",
+        });
+      });
   };
 
   const handleNextButton = () => {
-    console.log("next");
-    updateLinks();
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${user.token}`);
+
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(nextPagination, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success) {
+          setData(result.data);
+
+          if (result.data.links.previous !== null) {
+            setPreviousPagination(
+              result.data.links.previous.replace("http://", "https://")
+            );
+          } else {
+            setPreviousPagination(null);
+          }
+
+          if (result.data.links.next !== null) {
+            setNextPagination(
+              result.data.links.next.replace("http://", "https://")
+            );
+          } else {
+            setNextPagination(null);
+          }
+
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast({
+          description: "Server sedang main tenis 🙃",
+          status: "info",
+          duration: 15000,
+          isClosable: true,
+          position: "top-right",
+        });
+      });
   };
 
   const handleLogoutButton = () => {
@@ -279,7 +382,7 @@ export default function Swibc(props) {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {links.results.map((item, index) => {
+                    {data.results.map((item, index) => {
                       return (
                         <Tr key={index}>
                           <Td>
@@ -303,6 +406,22 @@ export default function Swibc(props) {
             )) || (
               <Box borderWidth="4px" borderStyle="dashed" rounded="md" h="96" />
             )}
+            <Button
+              colorScheme="purple"
+              sx={{ m: 1 }}
+              disabled={previousPagination === null ? true : false}
+              onClick={handlePrevButton}
+            >
+              Sebelumnya
+            </Button>
+            <Button
+              colorScheme="purple"
+              sx={{ m: 1 }}
+              disabled={nextPagination === null ? true : false}
+              onClick={handleNextButton}
+            >
+              Selanjutnya
+            </Button>
           </Box>
         </Box>
       </Box>
