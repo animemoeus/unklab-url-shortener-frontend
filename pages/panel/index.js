@@ -277,8 +277,10 @@ export default function Swibc(props) {
           <NavItem icon={MdHome} onClick={() => router.push("/")}>
             Home
           </NavItem>
+          <NavItem icon={HiCollection} onClick={() => router.push("/kostum")}>
+            Kostum Link
+          </NavItem>
           {/* <NavItem icon={FaRss}>Articles</NavItem>
-        <NavItem icon={HiCollection}>Collections</NavItem>
         <NavItem icon={FaClipboardCheck}>Checklists</NavItem>
         <NavItem icon={HiCode} onClick={integrations.onToggle}>
           Integrations
