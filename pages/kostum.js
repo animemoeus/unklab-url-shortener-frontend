@@ -205,7 +205,7 @@ export default function Index(props) {
             </Button>
             <GridItem as="label" colSpan={{ base: "auto", lg: 12 }}>
               <InputGroup>
-                <InputLeftAddon children={`${process.env.domain}/`} />
+                <InputLeftAddon>{`${process.env.domain}/`}</InputLeftAddon>
                 <Input
                   type="tel"
                   placeholder="..."
