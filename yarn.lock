@@ -1674,9 +1674,9 @@ form-data@^4.0.0:
     combined-stream "^1.0.8"
     mime-types "^2.1.12"
 
-framer-motion@^6.3.6:
-  version "6.3.6"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-6.3.6.tgz#9ca52544a7d0c74668f880eb2cab4a5de6dc71a0"
+framer-motion@^6.3.10:
+  version "6.3.10"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-6.3.10.tgz#e71f8c4ee09612de8328725c4fb1a1c204ae451f"
   dependencies:
     framesync "6.0.1"
     hey-listen "^1.0.8"
